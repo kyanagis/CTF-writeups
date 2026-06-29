@@ -41,10 +41,10 @@ flagが見えました!
 
 ## 原因とか
 
-`index.js`の8行目に,
+`index.js`の8行目に，
 `app.use(express.static(publicDir));`とある．
 `express.static`は`public/`ディレクトリ配下のファイルをそのまま全て配信するので`public/`ディレクトリにある`flag.txt`が普通に`GET`できました．
 
-`index.js`の10行目に,
+`index.js`の10行目に，
 `app.get("/admin", (req, res) => {`
-とあり，`/admin`ルートを守っているが，`public/`ディレクトリにある`admin.html`が静的配信で普通に`GET`ができます.
+とあり，`/admin`ルートを守っているが，`public/`ディレクトリにある`admin.html`が静的配信で普通に`GET`ができます．

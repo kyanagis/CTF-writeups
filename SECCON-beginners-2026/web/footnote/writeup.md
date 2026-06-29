@@ -56,8 +56,8 @@
 とりあえず怪しいファイル順に見ていく．
 1. `src/filter.ts`
 2. `src/server.ts`
-3. `prisma/schema.prism`
-4. `prisma/schema.prisma`
+3. `prisma/schema.prisma`
+4. `prisma/seed.ts`
 
 ## src/filter.ts
 
@@ -151,7 +151,7 @@ function buildStringCondition(op: string, value: string) {
 - secretMemoの中身はレスポンスに出てこない（-> server.ts）ので直接は読めない．が，`startsWith`で前方一致をかけられるので，一致する記事が返るか否かでその真偽だけが分かる．
 - これを1文字ずつ繰り返せば，中身を直接見ずにsecretMemoを端から復元できる．「中身は隠されているのにYes/Noだけ漏れる窓口」なのでブラインドオラクルと呼ばれるっぽい．
 
-つまり，`field=author.profile.secretMemo`，`op=startsWith`，`value=xx`を投げて，ヒットの有無で1文字ずつ秘密を抜けるっぽい.
+つまり，`field=author.profile.secretMemo`，`op=startsWith`，`value=xx`を投げて，ヒットの有無で1文字ずつ秘密を抜けるっぽい．
 
 ## src/filter.tsで分かったこと
 
@@ -182,7 +182,7 @@ app.get("/api/articles/search", searchLimiter, async (req, res) => {
 
 ```
 
-- `isAdvancedSearch`はfiled/op/valueのどれか一つでもあれば`true`なので，`?filed=&op=&value=`をつけるだけでbuildAdvancedWhereに入ることがわかる．
+- `isAdvancedSearch`はfield/op/valueのどれか一つでもあれば`true`なので，`?field=&op=&value=`をつけるだけでbuildAdvancedWhereに入ることがわかる．
 
 続きの76行目，実際の検索
 ```
@@ -217,10 +217,10 @@ app.get("/api/articles/search", searchLimiter, async (req, res) => {
     });
 
 ```
-- 自分のフィルタが`published: true`とANDされ検索れる
-- `articleSelect`(26行目)が返すのは`id/title/body`と`author.profile.{displayName, bio}`だけ．`secret.Memo`は入っていない．
+- 自分のフィルタが`published: true`とANDされ検索される
+- `articleSelect`(26行目)が返すのは`id/title/body`と`author.profile.{displayName, bio}`だけ．`secretMemo`は入っていない．
 	- filter.tsでの直接読めない，が確定
-- 返るのはどの記事がヒットしたかだけ，adminの記事には`displayName: "admin"`が乗るので，それを信号として真偽を判定できる？
+- 返るのはどの記事がヒットしたかだけ．adminの記事には`displayName: "admin"`が乗るので，それを信号として真偽を判定できる．
 
 
 99行目，`POST /api/claim`（flagの出口）
@@ -239,7 +239,7 @@ app.post("/api/claim", claimLimiter, async (req, res) => {
 });
 ```
 - `{ memo }`を投げてadminのsecretMemoと一致すればflagが返る．
-- -> オラクルで復元したsecretMemoをそのままclaimに投げればいい.
+- -> オラクルで復元したsecretMemoをそのままclaimに投げればいい．
 
 ## 現状で分かったこと
 - エンドポイントは2つ．`GET /api/articles/search`（検索）と`POST /api/claim`（flag）．

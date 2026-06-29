@@ -39,7 +39,7 @@
 わかること: 
 - `app/app/`配下に`layout.tsx`/`page.tsx`,`tsconfig.json`/`next.config.ts`/`next-env.d.ts`がある -> App Router構成のNext.jsである．
 - 機能は本棚?
-  - `app.page.tsx`,`books/page.tsx`,`books/[id]/`
+  - `app/page.tsx`,`books/page.tsx`,`books/[id]/`
 
 
 URL踏んで確認してみると，書籍一覧があって，`詳細を見る`をクリックすると，`books/[id]`に対応するみたいですね
@@ -48,7 +48,7 @@ URL踏んで確認してみると，書籍一覧があって，`詳細を見る`
 
 `books/[id]`の`[id]`がぱっと見怪しそうなので，`books/[id]/page.tsx`をとりあえず読んでみる．
 
-すると`[id]`が`2`の時にflagが`internalNote`フィールドに`process.env.FLAG `が注入されることがぱっと見でわかりました.
+すると`[id]`が`2`の時にflagが`internalNote`フィールドに`process.env.FLAG`が注入されることがぱっと見でわかりました．
 ```
 {
 id: "2",
@@ -70,4 +70,4 @@ internalNote: process.env.FLAG ?? "ctf4b{dummy_flag}",
 
 - `page.tsx`（サーバーコンポーネント）が，`internalNote: process.env.FLAG`を含む`book`を丸ごと`"use client"`な`BookDetail`にpropで渡している．
 - サーバーからクライアントにpropを渡すと，Next.jsは全フィールドをシリアライズしてHTMLに埋め込む．画面に描画してない`internalNote`も一緒に送られる．
-- 結果，`GET /books/2`のレスポンスにFLAGがそのまま乗る．．
+- 結果，`GET /books/2`のレスポンスにFLAGがそのまま乗る．
