@@ -63,7 +63,7 @@
 
 25行目の`validateFilterField`という関数．
 rootだけ検証して，以降のセグメントは正規表現しか見ていないことがわかる．
-```
+```ts
 const ALLOWED_FILTER_ROOTS = new Set(["title", "body", "author"]);
 const ALLOWED_OPERATORS = new Set(["eq", "contains", "startsWith"]);
 const TO_ONE_RELATIONS = new Set(["author", "profile"]);
@@ -95,7 +95,7 @@ function validateFilterField(field: string) {
 
 
 buildNestedWhereという関数の68行目
-```
+```ts
 const TO_ONE_RELATIONS = new Set(["author", "profile"]); 
 
 ...
@@ -130,7 +130,7 @@ function buildNestedWhere(
 
 
 `buildStringCondition`という関数の40行目
-```
+```ts
 const ALLOWED_OPERATORS = new Set(["eq", "contains", "startsWith"]);
 
 ...
@@ -164,7 +164,7 @@ function buildStringCondition(op: string, value: string) {
 
 ## src/server.ts
 62行目，検索のエントリーポイント
-```
+```ts
 app.get("/api/articles/search", searchLimiter, async (req, res) => {
   try {
     const filterWhere = isAdvancedSearch({
@@ -185,7 +185,7 @@ app.get("/api/articles/search", searchLimiter, async (req, res) => {
 - `isAdvancedSearch`はfield/op/valueのどれか一つでもあれば`true`なので，`?field=&op=&value=`をつけるだけでbuildAdvancedWhereに入ることがわかる．
 
 続きの76行目，実際の検索
-```
+```ts
 const articleSelect = {
   id: true,
   title: true,
@@ -224,7 +224,7 @@ app.get("/api/articles/search", searchLimiter, async (req, res) => {
 
 
 99行目，`POST /api/claim`（flagの出口）
-```
+```ts
 
 app.post("/api/claim", claimLimiter, async (req, res) => {
 

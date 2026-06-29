@@ -49,7 +49,7 @@ URL踏んで確認してみると，書籍一覧があって，`詳細を見る`
 `books/[id]`の`[id]`がぱっと見怪しそうなので，`books/[id]/page.tsx`をとりあえず読んでみる．
 
 すると`[id]`が`2`の時にflagが`internalNote`フィールドに`process.env.FLAG`が注入されることがぱっと見でわかりました．
-```
+```ts
 {
 id: "2",
 title: "Flight Book",
